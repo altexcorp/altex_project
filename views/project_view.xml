@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Add Code to Project Setting form View -->
+        <record id="project_code_form_view" model="ir.ui.view">
+            <field name="name">project.code.form.view</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="code" required="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Add Code to Task Form View -->
+        <record id="task_code_form_view" model="ir.ui.view">
+            <field name="name">task.code.form.view</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//h1[@class='o_row']" position="before">
+                    <h1 class="o_row">
+                        <field name="code" readonly="1"/>
+                    </h1>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="task_code_tree_view" model="ir.ui.view">
+            <field name="name">task.code.tree.view</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="code" />
+                </xpath>
+            </field>
+        </record>
+
+        <!--Add Customer Logo to the Project Kanban View-->
+        <record id="project_image_kanban_view" model="ir.ui.view">
+            <field name="name">project.image.kanban.view</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='doc_count']" position="after">
+                    <field name="image"/>
+                    <field name="partner_id"/>
+                </xpath>
+                <xpath expr="//div[@class='o_kanban_card_content o_visible']" position="inside">
+                    <div class="o_kanban_image" style="height:150px; width:200px">
+                        <t t-if="record.partner_id">
+                            <t t-if="record.image.raw_value">
+                                <img t-att-src="kanban_image('project.project', 'image', record.id.value)"/>
+                            </t>
+                        </t>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="task_code_kanban_view" model="ir.ui.view">
+            <field name="name">task.code.kanban.view</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='legend_done']" position="after">
+                    <field name="code"/>
+                </xpath>
+                <xpath expr="//div[@class='oe_kanban_content'][1]" position="before">
+                    <div>
+                        <strong><field name="code"/></strong>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

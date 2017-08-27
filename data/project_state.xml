@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="altex_task_type_assigned_external_id" model="ir.model.data">
+            <field name="module">altex_project</field>
+            <field name="name">altex_project_task_assigned</field>
+            <field name="model">project.task.type</field>
+            <field name="res_id">9</field>
+            <field name="noupdate" eval="True"></field>
+        </record>
+
+        <record id="altex_task_type_progress_external_id" model="ir.model.data">
+            <field name="module">altex_project</field>
+            <field name="name">altex_project_task_progress</field>
+            <field name="model">project.task.type</field>
+            <field name="res_id">4</field>
+            <field name="noupdate" eval="True"></field>
+        </record>
+
+        <record id="altex_task_type_confirmed_external_id" model="ir.model.data">
+            <field name="module">altex_project</field>
+            <field name="name">altex_project_task_confirmed</field>
+            <field name="model">project.task.type</field>
+            <field name="res_id">10</field>
+            <field name="noupdate" eval="True"></field>
+        </record>
+
+        <record id="altex_task_type_cancelled_external_id" model="ir.model.data">
+            <field name="module">altex_project</field>
+            <field name="name">altex_project_task_cancelled</field>
+            <field name="model">project.task.type</field>
+            <field name="res_id">5</field>
+            <field name="noupdate" eval="True"></field>
+        </record>
+
+    </data>
+</openerp>

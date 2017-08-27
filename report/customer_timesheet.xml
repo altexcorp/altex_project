@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<template id="customer_timesheet">
+			<t t-call="report.html_container">
+                <div class="page">
+                    <div class="row" style="margin-bottom:16px;">
+                        <t t-set="company" t-value="docs.project_id.analytic_account_id.company_id"/>
+						<div class="col-xs-3">
+							<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 100px; width:200"/>
+						</div>
+						<div class="col-xs-5">
+							<span t-field="company.partner_id"
+                                  t-field-options='{"widget": "contact",
+                                                    "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+						</div>
+						<div class="col-xs-4" style="min-height: 100px; background: red; color:white">
+                            <div><strong>Document de synthèse des actions réalisées dans le cadre du projet:</strong></div>
+                            <div class="text-center"><strong t-field="docs.project_id.name"/></div>
+						</div>
+					</div>
+                    <div class="row" style="margin-bottom:32px;">
+                        <div class="col-xs-6">
+                            <strong>Customer:</strong>
+                            <span t-field="docs.project_id.partner_id"
+                                  t-field-options='{"widget": "contact",
+                                                    "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+                        </div>
+                        <div class="col-xs-5 pull-right">
+                            <table>
+                                <tr style="margin-top:2px; margin-bottom:2px;">
+                                    <td style="padding-top:3px;padding-top:3px"><strong>Project Reference:</strong></td>
+                                    <td style="padding-left:5px"><span t-field="docs.project_id.code"/></td>
+                                </tr>
+                                <tr style="margin-top:2px; margin-bottom:2px;">
+                                    <td style="padding-top:3px;padding-top:3px"><strong>Project Manager:  </strong></td>
+                                    <td style="padding-left:5px"><span t-field="docs.project_id.user_id"/></td>
+                                </tr>
+                                <tr style="margin-top:2px; margin-bottom:2px;">
+                                    <td style="padding-top:3px;padding-top:3px"><strong>Period Start Date:</strong></td>
+                                    <td style="padding-left:5px"><span t-field="docs.from_date"/></td>
+                                </tr>
+                                <tr style="margin-top:2px; margin-bottom:2px;">
+                                    <td style="padding-top:3px;padding-top:3px"><strong>Period End Date:</strong></td>
+                                    <td style="padding-left:5px"><span t-field="docs.to_date"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <table class="table mt32">
+                        <thead>
+                            <tr style="color:white; border:1px solid black; background:grey">
+                                <td style="border:1px  solid black;">Date</td>
+                                <td style="border:1px solid black;">Ressource</td>
+                                <td style="border:1px solid black;">Tâche</td>
+                                <td style="border:1px solid black;">Description</td>
+                                <td style="border:1px solid black;">Temps</td>
+                            </tr>
+                        </thead>
+
+                        <tbody >
+                            <t t-set="total" t-value="0"/>
+                            <t t-set="timesheet_total" t-value="0"/>
+                            <t t-set="timesheet_total_hour" t-value="0"/>
+                            <t t-set="timesheet_total_minute" t-value="0"/>
+
+                            <tr t-foreach="get_timesheet" t-as="doc">
+                                <t t-set="time_day" t-value="0"/>
+                                <t t-set="time_day_hour" t-value="0"/>
+                                <t t-set="time_day_minute" t-value="0"/>
+
+                                <tr t-foreach="set(doc['task'])" t-as="task">
+                                    <t t-set="time_task" t-value="0"/>
+                                    <t t-set="time_task_hour" t-value="0"/>
+                                    <t t-set="time_task_minute" t-value="0"/>
+                                    <td style="border:1px solid black;"><span t-esc="doc['date']"/></td>
+                                    <td style="border:1px solid black;"><span t-esc="docs.user_id.name"/></td>
+                                    <td  style="border:1px solid black;"><span t-esc="task"/></td>
+                                    <td style="border:1px solid black;">
+                                        <ul style="padding-left: 10px">
+                                            <t t-set="activity_number" t-value="0"/>
+                                            <t t-foreach="doc['activities']" t-as="activity">
+                                                <t t-if="task == doc['task'][activity_number]">
+                                                    <li t-esc="activity"/>
+                                                    <t t-set="time_task" t-value="time_task + doc['durations'][activity_number]"/>
+                                                </t>
+                                                <t t-set="activity_number" t-value="activity_number + 1"/>
+                                            </t>
+                                        </ul>
+                                    </td>
+
+                                    <td style="border:1px solid black;">
+
+                                        <t t-if="docs.mode == 'jour'">
+                                            <span t-esc="1"/>
+                                        </t>
+
+                                        <t t-if="docs.mode == 'heur'">
+                                            <t t-set="time_task_hour" t-value="int(time_task)"/>
+                                            <t t-set="time_task_minute" t-value="(time_task - time_task_hour) * 60"/>
+                                            <t t-set="time_task_minute" t-value="int(time_task_minute*100)/100.0"/>
+
+                                            <t t-if="time_task_minute != int(time_task_minute)">
+                                                <t t-set="time_task_minute" t-value="int(time_task_minute) +1"/>
+                                            </t>
+
+                                            <p><span t-esc="time_task_hour"/> h
+                                                <span t-esc="int(time_task_minute)"/> min
+                                            </p>
+                                            <t t-set="timesheet_total" t-value="timesheet_total + time_task"/>
+                                            <t t-set="timesheet_total_hour" t-value="timesheet_total_hour + time_task_hour"/>
+                                            <t t-set="timesheet_total_minute" t-value="timesheet_total_minute + time_task_minute"/>
+
+                                        </t>
+
+                                    </td>
+                                    <t t-set="time_day_hour" t-value="time_day_hour + time_task_hour"/>
+                                    <t t-set="time_day_minute" t-value="time_day_minute + time_task_minute"/>
+
+                                </tr>
+                                <t t-if="docs.mode == 'heur'">
+                                    <!--t t-set="time_day_hour" t-value="int(time_day)"/>
+                                    <t t-set="time_day_minute" t-value="(time_day - time_day_hour) * 60"/-->
+                                    <tr>
+                                        <td style="border-left:1px solid black;border-bottom:1px solid black;"></td>
+                                        <td style="border-bottom:1px solid black;"></td>
+                                        <td style="border-bottom:1px solid black;"></td>
+                                        <td style="border:1px solid black;">Total des heures cumulées le  <span t-esc="doc['date']"/></td>
+                                        <td style="border:1px solid black;">
+                                            <p><span t-esc="time_day_hour"/> h <span t-esc="int(time_day_minute)"/> min </p>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-set="total" t-value="total + 1"/>
+                            </tr>
+                            <t t-if="docs.mode == 'heur'">
+                                <!--t t-set="timesheet_total_hour" t-value="int(timesheet_total)"/>
+                                <t t-set="timesheet_total_minute" t-value="(timesheet_total - timesheet_total_hour) * 60"/-->
+                                <tr>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                        <td style="border:1px solid black;" class="text-right">
+                                            <strong>Total des Heures </strong>
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <p><span t-esc="timesheet_total_hour"/> h <span t-esc="int(timesheet_total_minute)"/> min </p>
+                                        </td>
+                                </tr>
+                                <tr>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                        <td style="border:1px solid black;" class="text-right">
+                                            <strong>Total ETP (Equivalent Temps Plein)</strong>
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <p><span t-esc="timesheet_total/ int(docs.etp)"/>  </p>
+                                        </td>
+                                </tr>
+                            </t>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="border:1px solid black;" class="text-right">
+                                    <strong>Total des jours</strong>
+                                </td>
+                                <td style="border:1px solid black;"><strong t-esc="total"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <t t-if="docs.mode == 'heur'">
+                    <p >
+                        La formule appliquée pour calculer le Total ETP :
+                            1 Jour / Homme =  <span t-esc="docs.etp"/> Heures .
+                    </p>
+                    </t>
+                    <table class="table mt32">
+                        <thead>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span t-esc="'Validation ' + docs.project_id.partner_id.name"/>
+                                    </strong>
+                                </td>
+                                <td><strong>Date</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="min-height: 100px"></td>
+                                <td style="min-height: 100px">
+                                    <strong><span t-esc="datetime.datetime.now().strftime('%d-%m-%Y')"/></strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <div class="text-center" style="border-top: 1px solid black;">
+                        <ul t-if="not company.custom_footer" class="list-inline">
+                            <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+                            <li t-if="company.fax and company.phone">&amp;bull;</li>
+                            <li t-if="company.fax">Fax: <span t-field="company.fax"/></li>
+
+                            <li t-if="company.email">&amp;bull;</li>
+                            <li t-if="company.email">Email: <span t-field="company.email"/></li>
+
+                            <li t-if="company.website">&amp;bull;</li>
+                                <li t-if="company.website">Website: <span t-field="company.website"/></li>
+                        </ul>
+
+                        <t t-if="company.custom_footer">
+                            <span t-raw="company.rml_footer"/>
+                        </t>
+
+                        <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                        </ul>
+                    </div>
+                </div>
+			</t>
+    	</template>
+    </data>
+</openerp>

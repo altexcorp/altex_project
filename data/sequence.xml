@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="altex_project_GSS_seq" model="ir.sequence">
+            <field name="name">GSS Integration OeBS Project</field>
+            <field name="code">altex.project.GSS</field>
+            <field name="prefix">GSS-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="altex_project_ALDOO_seq" model="ir.sequence">
+            <field name="name">Internal Odoo Integartion</field>
+            <field name="code">altex.project.ALDOO</field>
+            <field name="prefix">ALDOO-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="altex_project_SGDJ_seq" model="ir.sequence">
+            <field name="name">Justice Ministry Project</field>
+            <field name="code">altex.project.SGDJ</field>
+            <field name="prefix">SGDJ-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="altex_project_OURHOUD_seq" model="ir.sequence">
+            <field name="name">OURHOUD OeBS Support Consulting</field>
+            <field name="code">altex.project.OURHOUD</field>
+            <field name="prefix">OURHOUD-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="altex_project_SHFCP_seq" model="ir.sequence">
+            <field name="name">SHFCP Integration OeBS</field>
+            <field name="code">altex.project.SHFCP</field>
+            <field name="prefix">SHFCP-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="altex_project_MUANCE_seq" model="ir.sequence">
+            <field name="name">United Coating SARL Odoo ERP Integration</field>
+            <field name="code">altex.project.MUANCE</field>
+            <field name="prefix">MUANCE-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+    </data>
+</openerp>

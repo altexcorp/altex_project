@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            id="report_project_customer_timesheet"
+            string="Customer Timesheet"
+            model="project.customer.timesheet"
+            report_type="qweb-pdf"
+            file="altex_project.customer_timesheet"
+            name="altex_project.customer_timesheet"
+        />
+    </data>
+</openerp>

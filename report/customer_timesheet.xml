@@ -71,11 +71,16 @@
                                 <t t-set="time_day" t-value="0"/>
                                 <t t-set="time_day_hour" t-value="0"/>
                                 <t t-set="time_day_minute" t-value="0"/>
+                                <t t-set="total_min_cumul" t-value="0"/>
+                                <t t-set="quotient_cumul" t-value="0"/>
+                                <t t-set="reminder_cumul" t-value="0"/>
 
                                 <tr t-foreach="set(doc['task'])" t-as="task">
                                     <t t-set="time_task" t-value="0"/>
                                     <t t-set="time_task_hour" t-value="0"/>
                                     <t t-set="time_task_minute" t-value="0"/>
+
+
                                     <td style="border:1px solid black;"><span t-esc="doc['date']"/></td>
                                     <td style="border:1px solid black;"><span t-esc="docs.user_id.name"/></td>
                                     <td  style="border:1px solid black;"><span t-esc="task"/></td>
@@ -117,11 +122,18 @@
                                         </t>
 
                                     </td>
+
                                     <t t-set="time_day_hour" t-value="time_day_hour + time_task_hour"/>
                                     <t t-set="time_day_minute" t-value="time_day_minute + time_task_minute"/>
 
                                 </tr>
+
+
+
                                 <t t-if="docs.mode == 'heur'">
+                                    <t t-set="total_min_cumul" t-value="(time_day_hour * 60) + time_day_minute"/>
+                                    <t t-set="quotient_cumul" t-value="int(total_min_cumul / 60)"/>
+                                    <t t-set="reminder_cumul" t-value="total_min_cumul - (quotient_cumul * 60)"/>
                                     <!--t t-set="time_day_hour" t-value="int(time_day)"/>
                                     <t t-set="time_day_minute" t-value="(time_day - time_day_hour) * 60"/-->
                                     <tr>
@@ -130,7 +142,7 @@
                                         <td style="border-bottom:1px solid black;"></td>
                                         <td style="border:1px solid black;">Total des heures cumulées le  <span t-esc="doc['date']"/></td>
                                         <td style="border:1px solid black;">
-                                            <p><span t-esc="time_day_hour"/> h <span t-esc="int(time_day_minute)"/> min </p>
+                                            <p><span t-esc="quotient_cumul"/> h <span t-esc="int(reminder_cumul)"/> min </p>
                                         </td>
                                     </tr>
                                 </t>

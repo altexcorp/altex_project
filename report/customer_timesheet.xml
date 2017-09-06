@@ -63,6 +63,9 @@
                             <t t-set="timesheet_total" t-value="0"/>
                             <t t-set="timesheet_total_hour" t-value="0"/>
                             <t t-set="timesheet_total_minute" t-value="0"/>
+                            <t t-set="total_min" t-value="0"/>
+                            <t t-set="quotient" t-value="0"/>
+                            <t t-set="reminder" t-value="0"/>
 
                             <tr t-foreach="get_timesheet" t-as="doc">
                                 <t t-set="time_day" t-value="0"/>
@@ -133,6 +136,11 @@
                                 </t>
                                 <t t-set="total" t-value="total + 1"/>
                             </tr>
+
+                            <t t-set="total_min" t-value="(timesheet_total_hour * 60) + timesheet_total_minute"/>
+                            <t t-set="quotient" t-value="int(total_min / 60)"/>
+                            <t t-set="reminder" t-value="total_min - (quotient * 60)"/>
+
                             <t t-if="docs.mode == 'heur'">
                                 <!--t t-set="timesheet_total_hour" t-value="int(timesheet_total)"/>
                                 <t t-set="timesheet_total_minute" t-value="(timesheet_total - timesheet_total_hour) * 60"/-->
@@ -145,7 +153,7 @@
                                             <strong>Total des Heures </strong>
                                         </td>
                                         <td style="border:1px solid black;">
-                                            <p><span t-esc="timesheet_total_hour"/> h <span t-esc="int(timesheet_total_minute)"/> min </p>
+                                            <p><span t-esc="quotient"/> h <span t-esc="int(reminder)"/> min </p>
                                         </td>
                                 </tr>
                                 <tr>
